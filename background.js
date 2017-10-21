@@ -1,3 +1,3 @@
 chrome.browserAction.onClicked.addListener(function(tab) {
-   chrome.tabs.executeScript(null, {file: "remove.js"});
+   chrome.tabs.executeScript(tab.id, {file: "remove.js"});
 });
