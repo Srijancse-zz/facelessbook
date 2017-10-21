@@ -7,7 +7,7 @@
     "scripts": ["background.js"]
   },
   "browser_action": {
-    // "default_icon": "logo.png"
+    "default_icon": "anon.png"
   },
   "permissions": ["http://facebook.com/*"]
   // "icons": {
