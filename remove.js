@@ -15,7 +15,17 @@ function extractID(path) {
 }
 
 function getCurrrentDOM_Elements() {
-  return Array.prototype.filter.call(document.querySelectorAll('[data-hovercard]'),el=>/^\/ajax\/hovercard\/(user|hovercard|group)\.php/.test(el.dataset.hovercard));
+  return Array.prototype.filter.call(document.querySelectorAll('[data-hovercard]'),el=>/^\/ajax\/hovercard\/(user|hovercard|group|page)\.php/.test(el.dataset.hovercard));
+}
+
+
+function genColor(seed) {
+  let color = Math.floor((Math.abs(Math.sin(seed) * 16777215)) % 16777215).toString(16);
+  // pad any colors shorter than 6 characters with leading 0s
+  while(color.length < 6) {
+      color = '0' + color;
+  }
+  return color;
 }
 
 // new Set(Array.prototype.filter.call(document.querySelectorAll('[data-hovercard]'),el=>/^\/ajax\/hovercard\/(user|hovercard|group)\.php/.test(el.dataset.hovercard)).map(el=>new URLSearchParams(el.dataset.hovercard.substr(1+el.dataset.hovercard.indexOf("?"))).get('id')))
@@ -32,9 +42,10 @@ updateKnownElements();
 
 knownElements.forEach(el => {
   let img;
-  el.classList.add('murmur');
-  el.style.background = "grey";
+  el.style.background = `#${genColor(extractID(el.dataset.hovercard))}`;
   el.style.color = "transparent";
+  el.style.borderRadius = "1em"
+  // console.log(genColor(extractID(el.dataset.hovercard)));
   if(img = el.querySelector("img")) {
     img.style.opacity = "0";
   }
