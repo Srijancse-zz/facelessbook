@@ -3,13 +3,14 @@
   "name": "Facelessbook",
   "version": "1",
   "description": "Respect people's privacy. Removes names and pictures automatically from screenshots.",
-  "background": {
-    "scripts": ["background.js"]
-  },
+  "content_scripts": [{
+    "matches": ["*://facebook.com/*"],
+    "js": ["background.js"]
+  }],
   "browser_action": {
     "default_icon": "anon.png"
   },
-  "permissions": ["http://facebook.com/*"]
+  "permissions": ["tabs"]
   // "icons": {
   // }
 }
