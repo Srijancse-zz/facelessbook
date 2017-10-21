@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Facelessbook",
+  "version": "1",
+  "description": "Respect people's privacy. Removes names and pictures automatically from screenshots.",
+  "content_scripts": [
+  {
+    "matches": [
+      "https://www.facebook.com/*"
+    ],
+    "js": ["jquery.js", "remove.js"]
+  }
+]
+  // "icons": {
+  // }
+}
+
