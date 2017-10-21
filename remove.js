@@ -1,5 +1,13 @@
 {
 
+let selfStyleEl = document.querySelector("style#fbless") || (el => {
+  el.id = "fbless";
+  document.head.appendChild(el);
+  return el;
+})(document.createElement("style"));
+
+let selfStyle = selfStyleEl.sheet;
+
 let knownElements = new Set();
 
 function extractID(path) {
@@ -17,13 +25,20 @@ var dict = {};
 let entityMap = new Map();
 
 function updateKnownElements() {
-  getCurrrentDOM_Elements().map(el=>knownElements.add(el));
+  return getCurrrentDOM_Elements().map(el=>knownElements.add(el));
 }
 
-// updateKnownElements();
+updateKnownElements();
 
 knownElements.forEach(el => {
-  el.innerHTML = "";
+  let img;
+  el.classList.add('murmur');
+  el.style.background = "grey";
+  el.style.color = "transparent";
+  if(img = el.querySelector("img")) {
+    img.style.opacity = "0";
+  }
+  window.aaa = el;
 });
 
 
