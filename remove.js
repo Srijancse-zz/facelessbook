@@ -7,9 +7,6 @@ class IdColorMap {
   constructor() {
     this.data = new Map();
   }
-  static create() {
-    return new this();
-  }
   static decToHex(dec) {
     let hex = dec.toString(16);
     while(hex.length < 6) hex = '0' + hex;
@@ -30,17 +27,9 @@ class IdColorMap {
   }
 }
 
-let selfStyleEl = document.querySelector("style#fbless") || (el => {
-  el.id = "fbless";
-  document.head.appendChild(el);
-  return el;
-})(document.createElement("style"));
-
-let selfStyle = selfStyleEl.sheet;
-
 let knownElements = new Set();
 let knownLike = new Set();
-let colorMap = IdColorMap.create();
+let colorMap = new IdColorMap();
 
 function extractID(path) {
   return new URLSearchParams(path.substr(1+path.indexOf("?"))).get('id')
@@ -51,44 +40,28 @@ function getCurrrentDOM_Elements() {
 }
 
 function getCurrrentDOM_ElementsLike() {
-  return Array.prototype.filter.call(document.querySelectorAll(".UFILikeSentence"),el=>/^\/ajax\/hovercard\/(user|hovercard|group|page)\.php/.test(el.dataset.hovercard));
+  return Array.prototype.filter.call(document.querySelectorAll(".UFILikeSentence [data-hover='tooltip'],.UFIReplyActorPhotoWrapper img,.UFIReplySocialSentenceLinkText"),el=>el);
 }
 
-
-// new Set(Array.prototype.filter.call(document.querySelectorAll('[data-hovercard]'),el=>/^\/ajax\/hovercard\/(user|hovercard|group)\.php/.test(el.dataset.hovercard)).map(el=>new URLSearchParams(el.dataset.hovercard.substr(1+el.dataset.hovercard.indexOf("?"))).get('id')))
-
-var dict = {};
-
-let entityMap = new Map();
-
 function updateKnownElements() {
-  return getCurrrentDOM_Elements().map(el=>knownElements.add(el));
+  getCurrrentDOM_Elements().map(el=>knownElements.add(el));
+  return knownElements;
 }
 
 function updateKnownElementsLike() {
-  return getCurrrentDOM_ElementsLike().map(el=>knownLike.add(el));
+  getCurrrentDOM_ElementsLike().map(el=>knownLike.add(el));
+  return knownLike;
 }
 
+updateKnownElementsLike().forEach(el => (el.style.opacity = 0));
 
-updateKnownElements();
-updateKnownElementsLike();
-
-knownLike.forEach(el => {
-  el.style.opacity = "0";
+updateKnownElements().forEach(el => {
+  Object.assign(el.style, {
+    background: `#${colorMap.get(extractID(el.dataset.hovercard))}`,
+    color: 'transparent',
+    borderRadius: '1em'
+  });
+  Array.prototype.map.call(el.querySelectorAll('*'), el=>(el.style.opacity = 0));
 });
-
-knownElements.forEach(el => {
-  let img;
-  el.style.background = `#${colorMap.get(extractID(el.dataset.hovercard))}`;
-  el.style.color = "transparent";
-  el.style.borderRadius = "1em"
-  if(img = el.querySelector("img")) {
-    img.style.opacity = "0";
-  }
-  window.aaa = el;
-});
-
-
-console.log("yes")
 
 }
