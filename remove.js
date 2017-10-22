@@ -39,6 +39,7 @@ let selfStyleEl = document.querySelector("style#fbless") || (el => {
 let selfStyle = selfStyleEl.sheet;
 
 let knownElements = new Set();
+let knownLike = new Set();
 let colorMap = IdColorMap.create();
 
 function extractID(path) {
@@ -48,6 +49,11 @@ function extractID(path) {
 function getCurrrentDOM_Elements() {
   return Array.prototype.filter.call(document.querySelectorAll('[data-hovercard]'),el=>/^\/ajax\/hovercard\/(user|hovercard|group|page)\.php/.test(el.dataset.hovercard));
 }
+
+function getCurrrentDOM_ElementsLike() {
+  return Array.prototype.filter.call(document.querySelectorAll(".UFILikeSentence"),el=>/^\/ajax\/hovercard\/(user|hovercard|group|page)\.php/.test(el.dataset.hovercard));
+}
+
 
 // new Set(Array.prototype.filter.call(document.querySelectorAll('[data-hovercard]'),el=>/^\/ajax\/hovercard\/(user|hovercard|group)\.php/.test(el.dataset.hovercard)).map(el=>new URLSearchParams(el.dataset.hovercard.substr(1+el.dataset.hovercard.indexOf("?"))).get('id')))
 
@@ -59,7 +65,17 @@ function updateKnownElements() {
   return getCurrrentDOM_Elements().map(el=>knownElements.add(el));
 }
 
+function updateKnownElementsLike() {
+  return getCurrrentDOM_ElementsLike().map(el=>knownLike.add(el));
+}
+
+
 updateKnownElements();
+updateKnownElementsLike();
+
+knownLike.forEach(el => {
+  el.style.opacity = "0";
+});
 
 knownElements.forEach(el => {
   let img;
